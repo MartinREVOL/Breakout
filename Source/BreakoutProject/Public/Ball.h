@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Brick.h"
 #include "Ball.generated.h"
 
 UCLASS()
@@ -20,9 +21,6 @@ protected:
 public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
-
-    // Called to bind functionality to input
-    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
     // Root component
@@ -53,6 +51,27 @@ private:
     UPROPERTY(EditAnywhere, Category = "Ball Movement")
     float BottomBoundary;
 
-    // Function to handle boundary collisions
-    void HandleBoundaryCollision();
+    // Reference to the paddle actor
+    AActor* PaddleActor;
+
+    // Cooldown for paddle collision to avoid multiple rapid direction changes
+    bool bCanCollideWithPaddle;
+
+    // Time delay before enabling collision again
+    float CollisionCooldown;
+
+    // Timer to reset collision
+    FTimerHandle CollisionResetTimer;
+
+    // Handle collision with paddle
+    void CheckPaddleCollision();
+
+    // Find the paddle dynamically
+    void FindPaddle();
+
+    // Reset collision flag
+    void ResetPaddleCollision();
+
+    // Check for collisions with bricks
+    void CheckBrickCollisions();
 };
